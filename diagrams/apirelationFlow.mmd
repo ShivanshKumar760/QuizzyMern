@@ -1,0 +1,75 @@
+flowchart TD
+    %% Main components
+    Client([Client Application])
+    UserDB[(User Collection)]
+    QuizDB[(Quiz Collection)]
+    ResultDB[(Result Collection)]
+    
+    %% Authentication Flow
+    Client --> AuthSection["Authentication"]
+    
+    subgraph AuthSection [Authentication APIs]
+      Register["POST /api/auth/register"]
+      Login["POST /api/auth/login"]
+    end
+    
+    Register --> UserDB
+    Login --> UserDB
+    Register --> JWT[JWT Token]
+    Login --> JWT
+    
+    JWT --> ValidateUser[Authentication Middleware]
+    ValidateUser --> RoleCheck{User Role?}
+    
+    %% Teacher Flow
+    RoleCheck -->|Teacher| TeacherSection
+    
+    subgraph TeacherSection [Teacher APIs]
+      CreateQuiz["POST /api/quizzes\nCreate new quiz"]
+      UpdateQuiz["PUT /api/quizzes/:id\nUpdate existing quiz"]
+      DeleteQuiz["DELETE /api/quizzes/:id\nDelete quiz"]
+      TeacherResults["GET /api/results/teacher\nAll quiz results"]
+      SpecificResults["GET /api/quizzes/:id/results\nSpecific quiz results"]
+    end
+    
+    CreateQuiz --> QuizDB
+    UpdateQuiz --> QuizDB
+    DeleteQuiz --> QuizDB
+    TeacherResults --> ResultDB
+    SpecificResults --> ResultDB
+    
+    %% Student Flow
+    RoleCheck -->|Student| StudentSection
+    
+    subgraph StudentSection [Student APIs]
+      ViewQuizzes["GET /api/quizzes\nView available quizzes"]
+      TakeQuiz["POST /api/quizzes/:id/take\nSubmit quiz answers"]
+      StudentResults["GET /api/results/me\nView personal results"]
+    end
+    
+    ViewQuizzes --> QuizDB
+    TakeQuiz --> ProcessQuiz[Calculate Score]
+    ProcessQuiz --> ResultDB
+    StudentResults --> ResultDB
+    
+    %% Key relationships with better visibility
+    CreateQuiz -.->|Creates quiz ID needed for| UpdateQuiz
+    CreateQuiz -.->|Creates quiz ID needed for| DeleteQuiz
+    CreateQuiz -.->|Creates quiz ID needed for| SpecificResults
+    
+    ViewQuizzes -.->|Provides quiz ID for| TakeQuiz
+    TakeQuiz -.->|Creates result visible in| StudentResults
+    TakeQuiz -.->|Creates result visible in| TeacherResults
+    
+    %% Styling for better visibility
+    classDef authBox fill:#f9e79f,stroke:#333,stroke-width:2px
+    classDef teacherBox fill:#aed6f1,stroke:#333,stroke-width:2px
+    classDef studentBox fill:#a9dfbf,stroke:#333,stroke-width:2px
+    classDef database fill:#f5b7b1,stroke:#333,stroke-width:2px
+    classDef process fill:#d7bde2,stroke:#333,stroke-width:2px
+    
+    class AuthSection authBox
+    class TeacherSection teacherBox
+    class StudentSection studentBox
+    class UserDB,QuizDB,ResultDB database
+    class ProcessQuiz,ValidateUser process

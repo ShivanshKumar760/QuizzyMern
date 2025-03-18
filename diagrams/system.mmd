@@ -1,0 +1,62 @@
+flowchart TD
+    subgraph "Client Layer"
+        WebClient["Web Client\n(Browser)"]
+        MobileClient["Mobile Client\n(App)"]
+    end
+
+    subgraph "Load Balancing Layer"
+        LB["Load Balancer\n(Nginx/HAProxy)"]
+        WebClient --> LB
+        MobileClient --> LB
+    end
+
+    subgraph "Application Layer"
+        LB --> Server1["Express Server\nInstance 1"]
+        LB --> Server2["Express Server\nInstance 2"]
+        LB --> Server3["Express Server\nInstance 3"]
+    end
+
+    subgraph "Shared Resources"
+        SessionStore[(Redis\nSession Store)]
+        Server1 <--> SessionStore
+        Server2 <--> SessionStore
+        Server3 <--> SessionStore
+    end
+
+    subgraph "Database Layer"
+        MongoDB[(MongoDB)]
+        Server1 <--> MongoDB
+        Server2 <--> MongoDB
+        Server3 <--> MongoDB
+    end
+
+    subgraph "API Routes"
+        Server1 --- Auth["Authentication APIs\n/api/auth/*"]
+        Server1 --- TeacherAPI["Teacher APIs\n/api/quizzes/\n/api/results/teacher"]
+        Server1 --- StudentAPI["Student APIs\n/api/quizzes/:id/take\n/api/results/me"]
+        
+        Server2 --- Auth2["Authentication APIs\n/api/auth/*"]
+        Server2 --- TeacherAPI2["Teacher APIs\n/api/quizzes/\n/api/results/teacher"]
+        Server2 --- StudentAPI2["Student APIs\n/api/quizzes/:id/take\n/api/results/me"]
+        
+        Server3 --- Auth3["Authentication APIs\n/api/auth/*"]
+        Server3 --- TeacherAPI3["Teacher APIs\n/api/quizzes/\n/api/results/teacher"]
+        Server3 --- StudentAPI3["Student APIs\n/api/quizzes/:id/take\n/api/results/me"]
+    end
+
+    subgraph "Data Collections"
+        MongoDB --- UserCollection["User Collection"]
+        MongoDB --- QuizCollection["Quiz Collection"]
+        MongoDB --- ResultCollection["Result Collection"]
+    end
+
+    subgraph "Monitoring & Logging"
+        Monitoring["Monitoring Service\n(Prometheus/Grafana)"]
+        Logging["Logging Service\n(ELK Stack)"]
+        Server1 -.-> Monitoring
+        Server2 -.-> Monitoring
+        Server3 -.-> Monitoring
+        Server1 -.-> Logging
+        Server2 -.-> Logging
+        Server3 -.-> Logging
+    end

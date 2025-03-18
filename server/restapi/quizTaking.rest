@@ -1,0 +1,17 @@
+### Quiz Taking Endpoints
+@baseUrl = http://localhost:3000/api
+@studentToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2Q4OTcxMmYyYmM4NTg1MTcwOGEzOTEiLCJyb2xlIjoic3R1ZGVudCIsImlhdCI6MTc0MjI0NzcwMiwiZXhwIjoxNzQyMzM0MTAyfQ.0jnFvO8n0tHdWRslpBdLTt671Lt0Ag21BfYtHg4ffEU
+@quizId =67d896ccf2bc85851708a389
+
+### Take a quiz (student)
+POST {{baseUrl}}/quizzes/{{quizId}}/take
+Content-Type: application/json
+Authorization: Bearer {{studentToken}}
+
+{
+  "answers": [3, 1, 0]
+}
+
+### Get student's own results
+GET {{baseUrl}}/results/me
+Authorization: Bearer {{studentToken}}

@@ -1,0 +1,71 @@
+### Quiz Endpoints
+@baseUrl = http://localhost:3000/api
+@teacherToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2Q4OTY4N2YyYmM4NTg1MTcwOGEzODQiLCJyb2xlIjoidGVhY2hlciIsImlhdCI6MTc0MjI0NzU3MSwiZXhwIjoxNzQyMzMzOTcxfQ.sPNdwN9ZKH1LKysiiaDJ4u3_lEOeSVwNOdPh3XYEFc4
+@quizId = YOUR_QUIZ_ID_HERE
+
+### Get all quizzes (no auth required)
+GET {{baseUrl}}/quizzes
+
+### Create a new quiz (teacher only)
+# @name createQuiz
+POST {{baseUrl}}/quizzes
+Content-Type: application/json
+Authorization: Bearer {{teacherToken}}
+
+{
+  "title": "JavaScript Basics",
+  "description": "Test your knowledge of JavaScript fundamentals",
+  "questions": [
+    {
+      "text": "Which keyword is used to declare a variable in JavaScript?",
+      "options": ["var", "let", "const", "All of the above"],
+      "correctAnswer": 3
+    },
+    {
+      "text": "What is the correct way to check if two variables are equal in value and type?",
+      "options": ["==", "===", "=", "!="],
+      "correctAnswer": 1
+    }
+  ],
+  "timeLimit": 10
+}
+
+### After creating a quiz, you can copy the quiz ID from the response
+### Example:
+# {
+#   "_id": "YOUR_QUIZ_ID_HERE",
+#   "title": "JavaScript Basics",
+#   ...
+# }
+
+### Update a quiz (teacher only)
+PUT {{baseUrl}}/quizzes/{{quizId}}
+Content-Type: application/json
+Authorization: Bearer {{teacherToken}}
+
+{
+  "title": "JavaScript Fundamentals",
+  "description": "Updated description for JavaScript quiz",
+  "questions": [
+    {
+      "text": "Which keyword is used to declare a variable in JavaScript?",
+      "options": ["var", "let", "const", "All of the above"],
+      "correctAnswer": 3
+    },
+    {
+      "text": "What is the correct way to check if two variables are equal in value and type?",
+      "options": ["==", "===", "=", "!="],
+      "correctAnswer": 1
+    },
+    {
+      "text": "Which method adds an element to the end of an array?",
+      "options": ["push()", "pop()", "shift()", "unshift()"],
+      "correctAnswer": 0
+    }
+  ],
+  "timeLimit": 15
+}
+
+### Delete a quiz (teacher only)
+DELETE {{baseUrl}}/quizzes/{{quizId}}
+Authorization: Bearer {{teacherToken}}

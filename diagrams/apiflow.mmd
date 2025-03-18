@@ -1,0 +1,24 @@
+flowchart TD
+    A[Client] --> B{Authentication}
+    B -->|Login/Register| C[User Created/Authenticated]
+    
+    C --> D{User Role}
+    D -->|Teacher| E[Teacher Operations]
+    D -->|Student| F[Student Operations]
+    
+    E --> G[Create Quiz]
+    E --> H[Update Quiz]
+    E --> I[Delete Quiz]
+    E --> J[View Results]
+    
+    F --> K[View Quizzes]
+    F --> L[Take Quiz]
+    F --> M[View Own Results]
+    
+    G --> N[(MongoDB)]
+    H --> N
+    I --> N
+    J --> N
+    K --> N
+    L --> N
+    M --> N

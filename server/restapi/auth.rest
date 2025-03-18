@@ -1,0 +1,56 @@
+### Auth Endpoints
+@baseUrl = http://localhost:3000/api
+
+### Register a new teacher
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "teacher@example.com",
+  "password": "password123",
+  "role": "teacher"
+}
+
+### Register a new student
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "student@example.com",
+  "password": "password123",
+  "role": "student"
+}
+
+### Login as teacher
+# @name loginTeacher
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "teacher@example.com",
+  "password": "password123",
+  "role": "teacher"
+}
+
+### Login as student
+# @name loginStudent
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "student@example.com",
+  "password": "password123",
+  "role": "student"
+}
+
+### After running the login requests above, you can copy the token from the response
+### Example response format:
+# {
+#   "success": true,
+#   "user": {
+#     "id": "...",
+#     "email": "...",
+#     "role": "..."
+#   },
+#   "token": "YOUR_JWT_TOKEN_HERE"
+# }

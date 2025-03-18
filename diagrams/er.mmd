@@ -1,0 +1,37 @@
+erDiagram
+    USER {
+        ObjectId _id
+        String email
+        String password
+        String role
+        Date createdAt
+    }
+    
+    QUIZ {
+        ObjectId _id
+        String title
+        String description
+        Array questions
+        ObjectId createdBy
+        Date createdAt
+        Number timeLimit
+    }
+    
+    RESULT {
+        ObjectId _id
+        ObjectId quizId
+        String quizTitle
+        ObjectId studentId
+        String studentEmail
+        ObjectId teacherId
+        Number score
+        Number totalQuestions
+        Number percentage
+        Array answers
+        Date timestamp
+    }
+    
+    USER ||--o{ QUIZ : "creates"
+    USER ||--o{ RESULT : "takes/student"
+    USER ||--o{ RESULT : "receives/teacher"
+    QUIZ ||--o{ RESULT : "generates"

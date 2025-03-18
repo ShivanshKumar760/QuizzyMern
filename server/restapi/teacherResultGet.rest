@@ -1,0 +1,12 @@
+### Teacher Results Endpoints
+@baseUrl = http://localhost:3000/api
+@teacherToken = YOUR_TEACHER_TOKEN_HERE
+@quizId = YOUR_QUIZ_ID_HERE
+
+### Get all results for teacher's quizzes
+GET {{baseUrl}}/results/teacher
+Authorization: Bearer {{teacherToken}}
+
+### Get results for a specific quiz (teacher only)
+GET {{baseUrl}}/quizzes/{{quizId}}/results
+Authorization: Bearer {{teacherToken}}
